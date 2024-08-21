@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./App.scss";
+import NewActivities from "./components/newActivities/NewActivities";
+import ListItem from "./components/listItem/ListItem.jsx";
 
 function App() {
   const [activities, setActivities] = useState([
@@ -7,65 +9,36 @@ function App() {
     { text: "Studiare React", completed: false },
     { text: "Fare esercizio fisico", completed: true },
   ]);
+  const [selectedActivity, setSelectedActivity] = useState("Tutte");
 
-  const [inputValue, setInputValue] = useState("ciao");
+  const addNewActivities = (inputValue) => {
+    const newActivity = { text: inputValue, completed: false };
+    setActivities([...activities, newActivity]);
+  };
 
-  console.log("🚀 ~ App ~ activities:", activities);
   return (
     <div className="app-container">
-      <div className="new-activities">
-        <label htmlFor="activity" className="activity">
-          Inserisci la nuova attività
-        </label>
-        <input
+      <NewActivities addNewActivities={addNewActivities} />
+      <div>
+        <label>Filtra per </label>
+        <select
+          name="activity"
+          value={selectedActivity}
           onChange={(e) => {
-            setInputValue(e.target.value);
-          }}
-          type="text"
-          id="activity"
-          value={inputValue}
-        />
-        <button
-          className="btn"
-          onClick={() => {
-            const newActivity = { text: inputValue, completed: false };
-            const newActivities = [...activities, newActivity];
-            setActivities(newActivities);
+            setSelectedActivity(e.target.value);
           }}
         >
-          Aggiungi nuova attività
-        </button>
+          <option value="Tutte">Tutte</option>
+          <option value={true}>Completate</option>
+          <option value={false}>Non Completate</option>
+        </select>
       </div>
       <ul>
-        {activities.map((activity, currentIndex) => (
-          <li key={currentIndex}>
-            <span
-              className={activity.completed ? "completed" : ""}
-              onClick={() => {
-                const newActivities = [...activities];
-                newActivities.map((activity, index) => {
-                  if (currentIndex === index) {
-                    activity.completed = !activity.completed;
-                  }
-                });
-                setActivities(newActivities);
-              }}
-            >
-              {activity.text}{" "}
-            </span>
-
-            <span
-              className="remove"
-              onClick={() => {
-                const newActivities = [...activities];
-                newActivities.splice(currentIndex, 1);
-                setActivities(newActivities);
-              }}
-            >
-              X
-            </span>
-          </li>
-        ))}
+        <ListItem
+          activities={activities}
+          setActivities={setActivities}
+          selectedActivity={selectedActivity}
+        />
       </ul>
     </div>
   );
