@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./App.scss";
 import NewActivities from "./components/newActivities/NewActivities";
-import ListItem from "./components/listItem/ListItem.jsx";
+import List from "./components/list/List.jsx";
 
 function App() {
   const [activities, setActivities] = useState([
@@ -33,13 +33,12 @@ function App() {
           <option value={false}>Non Completate</option>
         </select>
       </div>
-      <ul>
-        <ListItem
-          activities={activities}
-          setActivities={setActivities}
-          selectedActivity={selectedActivity}
-        />
-      </ul>
+
+      <List
+        activities={activities}
+        setActivities={setActivities}
+        selectedActivity={selectedActivity}
+      />
     </div>
   );
 }
